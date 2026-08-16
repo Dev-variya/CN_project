@@ -1,14 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>File System</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: 40px auto;
+    }
+
+    .header {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    .header h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #6b7280;
+    }
+
+    .file-list {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+
+      box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 18px 25px;
+
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .file-item:last-child {
+      border-bottom: none;
+    }
+
+    .file-name {
+      font-size: 16px;
+      word-break: break-all;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      text-decoration: none;
+
+      padding: 8px 14px;
+
+      border-radius: 6px;
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .open-btn {
+      background: #2563eb;
+      color: white;
+    }
+
+    .open-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .download-btn {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .download-btn:hover {
+      background: #d1d5db;
+    }
+
+    @media (max-width: 650px) {
+
+      .container {
+        width: 95%;
+        margin: 20px auto;
+      }
+
+      .file-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .actions {
+        width: 100%;
+      }
+
+      .btn {
+        flex: 1;
+        text-align: center;
+      }
+    }
+
+  </style>
 </head>
+
 <body>
-    <h1>file system</h1>
-    <ul>
-    ${dynamicHTML}
-    </ul>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>📁 File System</h1>
+      <p>Browse and manage files stored on the server</p>
+    </div>
+
+    <div class="file-list">
+
+      ${dynamicHTML}
+
+    </div>
+
+  </div>
+
 </body>
+
 </html>
