@@ -534,3 +534,170 @@ body {
   }
 
 }
+/* ================================
+   UPLOAD SECTION
+================================ */
+
+.upload-section {
+  width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 18px 20px;
+  margin: 25px 0;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ================================
+   HIDE DEFAULT FILE INPUT
+================================ */
+
+#fileUpload {
+  display: none;
+}
+
+
+/* ================================
+   CHOOSE FILE BUTTON
+================================ */
+
+.file-upload-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 11px 18px;
+
+  background: #2563eb;
+  color: white;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.file-upload-label:hover {
+  background: #1d4ed8;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.25);
+}
+
+.file-upload-label:active {
+  transform: translateY(0);
+}
+
+
+/* ================================
+   HINT TEXT
+================================ */
+
+.upload-hint {
+  color: #6b7280;
+
+  font-size: 14px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ================================
+   UPLOAD PROGRESS CONTAINER
+================================ */
+
+.upload-progress {
+  width: 100%;
+
+  margin-top: 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+/* ================================
+   PROGRESS INFO
+================================ */
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 13px;
+  color: #4b5563;
+}
+
+
+/* ================================
+   PROGRESS BAR
+================================ */
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+
+  background: #e5e7eb;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+}
+
+
+/* ================================
+   PROGRESS FILL
+================================ */
+
+.progress-fill {
+  height: 100%;
+
+  background: #2563eb;
+
+  border-radius: 999px;
+
+  transition: width 0.2s ease;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 600px) {
+
+  .upload-section {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .file-upload-label {
+    width: 100%;
+  }
+
+  .upload-hint {
+    max-width: 100%;
+  }
+
+}

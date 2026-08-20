@@ -79,55 +79,89 @@ function App() {
       ) : error ? (
         <p>{error}</p>
       ) : (
-        directoryitem.map((item) => (
-          <div className="file-item" key={item.name}>
-            <div className="file-info">
-              <div className="file-icon">
-                {item.type === "directory" ? "📁" : "📄"}
+        <>
+          <div className="upload-section">
+            <label htmlFor="fileUpload" className="file-upload-label">
+              📁 Choose File
+            </label>
+
+            <input
+              type="file"
+              id="fileUpload"
+              onChange={async (e) => {
+                const file = e.target.files[0];
+
+                if (!file) return;
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", `http://127.0.0.1:80${currentPath}`, true);
+                xhr.setRequestHeader("filename", file.name);
+                xhr.upload.onprogress = (e) => {
+                  if (e.lengthComputable) {
+                    const progress = (e.loaded / e.total) * 100;
+                    console.log(progress);
+                  }
+                };
+                xhr.onload = () => {
+                  if (xhr.status >= 200 && xhr.status < 300) {
+                    fetchData(currentPath)
+                  }
+                };
+                xhr.send(file);
+              }}
+            />
+            <span className="upload-hint">Select a file to upload</span>
+          </div>
+          {directoryitem.map((item) => (
+            <div className="file-item" key={item.name}>
+              <div className="file-info">
+                <div className="file-icon">
+                  {item.type === "directory" ? "📁" : "📄"}
+                </div>
+
+                <div className="file-details">
+                  <span className="file-name">{item.name}</span>
+
+                  <span className="file-type">
+                    {item.type === "directory" ? "Folder" : "File"}
+                  </span>
+                </div>
               </div>
 
-              <div className="file-details">
-                <span className="file-name">{item.name}</span>
-
-                <span className="file-type">
-                  {item.type === "directory" ? "Folder" : "File"}
-                </span>
-              </div>
-            </div>
-
-            <div className="actions">
-              {item.type === "directory" ? (
-                <button
-                  className="btn open-btn"
-                  onClick={() => openFolder(item.name)}
-                >
-                  Open
-                </button>
-              ) : (
-                <>
-                  <a
+              <div className="actions">
+                {item.type === "directory" ? (
+                  <button
                     className="btn open-btn"
-                    href={`http://127.0.0.1:80${
-                      currentPath === "/" ? "" : currentPath
-                    }/${encodeURIComponent(item.name)}`}
-                    target="_blank"
+                    onClick={() => openFolder(item.name)}
                   >
                     Open
-                  </a>
+                  </button>
+                ) : (
+                  <>
+                    <a
+                      className="btn open-btn"
+                      href={`http://127.0.0.1:80${
+                        currentPath === "/" ? "" : currentPath
+                      }/${encodeURIComponent(item.name)}`}
+                      target="_blank"
+                    >
+                      Open
+                    </a>
 
-                  <a
-                    className="btn download-btn"
-                    href={`http://127.0.0.1:80${
-                      currentPath === "/" ? "" : currentPath
-                    }/${encodeURIComponent(item.name)}?action=download`}
-                  >
-                    Download
-                  </a>
-                </>
-              )}
+                    <a
+                      className="btn download-btn"
+                      href={`http://127.0.0.1:80${
+                        currentPath === "/" ? "" : currentPath
+                      }/${encodeURIComponent(item.name)}?action=download`}
+                    >
+                      Download
+                    </a>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        ))
+          ))}
+        </>
       )}
     </div>
   );
