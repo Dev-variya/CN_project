@@ -5,10 +5,8 @@ import path from "node:path";
 
 const httpServer = http.createServer(async (req, res) => {
   try {
-    // URL and query string separate
+    res.setHeader("Access-Control-Allow-Origin", "*");
     const [url, queryString] = req.url.split("?");
-
-    // Parse query parameters
     const queryParam = {};
 
     if (queryString) {
@@ -17,14 +15,10 @@ const httpServer = http.createServer(async (req, res) => {
         queryParam[key] = value;
       });
     }
-
-    // Root directory
     if (url === "/") {
       await serveFile(url, res);
       return;
     }
-
-    // Favicon
     if (url === "/favicon.ico") {
       res.statusCode = 404;
       res.end();
@@ -37,10 +31,6 @@ const httpServer = http.createServer(async (req, res) => {
     const fileHandle = await open(filePath);
     const stats = await fileHandle.stat();
 
-    // =========================
-    // DIRECTORY
-    // =========================
-
     if (stats.isDirectory()) {
       await fileHandle.close();
       await serveFile(url, res);
@@ -49,23 +39,18 @@ const httpServer = http.createServer(async (req, res) => {
 
     const readStream = fileHandle.createReadStream();
 
-    const contentType =
-      mime.contentType(path.basename(decodeURIComponent(url)));
-
-    res.setHeader(
-      "Content-Type",
-      contentType || "application/octet-stream"
+    const contentType = mime.contentType(
+      path.basename(decodeURIComponent(url)),
     );
+
+    res.setHeader("Content-Type", contentType);
 
     res.setHeader("Content-Length", stats.size);
 
-    // Only download when action=download
     if (queryParam.action === "download") {
       res.setHeader(
         "Content-Disposition",
-        `attachment; filename="${path.basename(
-          decodeURIComponent(url)
-        )}"`
+        `attachment; filename="${decodeURIComponent(url)}"`,
       );
     }
 
@@ -96,66 +81,20 @@ const httpServer = http.createServer(async (req, res) => {
 });
 
 httpServer.listen(80, "0.0.0.0", () => {
-  console.log(
-    "server started at port:",
-    httpServer.address().port
-  );
+  console.log("server started at port:", httpServer.address().port);
 });
-
 
 async function serveFile(url, res) {
   const currentUrl = decodeURIComponent(url);
-
   const directoryPath = `./storage${currentUrl}`;
+  const itemsData = await readdir(directoryPath, { withFileTypes: true });
 
-  const itemsData = await readdir(directoryPath);
-
-  let dynamicHtml = "";
-
-  itemsData.forEach((item) => {
-    // Correct path for nested folders
-    const itemPath =
-      `${currentUrl === "/" ? "" : currentUrl + "/"}${encodeURIComponent(item)}`;
-
-    dynamicHtml += `
-      <div class="file-item">
-
-        <span class="file-name">
-          📄 ${item}
-        </span>
-
-        <div class="actions">
-
-          <a
-            class="btn open-btn"
-            href="${itemPath}?action=open"
-          >
-            Open
-          </a>
-
-          <a
-            class="btn download-btn"
-            href="${itemPath}?action=download"
-          >
-            Download
-          </a>
-
-        </div>
-
-      </div>
-    `;
-  });
-
-  const UI = await readFile("./UI.html", "utf-8");
+  const result = itemsData.map((item) => ({
+    name: item.name,
+    type: item.isDirectory() ? "directory" : "file",
+  }));
 
   res.statusCode = 200;
-
-  res.setHeader(
-    "Content-Type",
-    "text/html; charset=utf-8"
-  );
-
-  res.end(
-    UI.replace("${dynamicHTML}", dynamicHtml)
-  );
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify(result));
 }

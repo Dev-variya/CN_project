@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "parcel": "^2.16.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  }
+}
